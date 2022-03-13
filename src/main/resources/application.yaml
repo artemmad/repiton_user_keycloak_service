@@ -1,0 +1,84 @@
+server.port: 9100
+server.servlet.context-path: /userservice
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  main:
+    allow-circular-references: true
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        #generate_statistics: true
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 4
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+#  zipkin:
+#    base-url: http://zipkin-service:9411
+
+  datasource:
+    url: jdbc:postgresql://kube-master1.otd4.vkrs:31167/udp
+    username: udp
+    password: udp
+
+
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/userservice
+    username: postgres
+    password: mysecretpassword
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+#keycloak:
+#  api:
+#    url: http://localhost:8085/auth/
+
+
+
+logging:
+  level:
+    ru:
+      udp: DEBUG
+    org:
+      apache:
+        http: DEBUG
+      springframework:
+        web:
+          servlet:
+            mvc: DEBUG
+          client:
+            RestTemplate: DEBUG
+        security: DEBUG
+        jdbc:
+          core:
+            StatementCreatorUtils: DEBUG
+            JdbcTemplate: DEBUG
+  pattern:
+    dateformat: dd-MM-yyyy HH:mm:ss
