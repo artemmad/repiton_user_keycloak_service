@@ -33,10 +33,10 @@ spring:
 #  zipkin:
 #    base-url: http://zipkin-service:9411
 
-  datasource:
-    url: jdbc:postgresql://kube-master1.otd4.vkrs:31167/udp
-    username: udp
-    password: udp
+#  datasource:
+#    url: jdbc:postgresql://kube-master1.otd4.vkrs:31167/udp
+#    username: udp
+#    password: udp
 
 
 
@@ -47,10 +47,10 @@ spring:
     activate:
       on-profile: dev
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/userservice
-    username: postgres
-    password: mysecretpassword
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/userservice
+#    username: postgres
+#    password: mysecretpassword
   jpa:
     generate-ddl: true
     hibernate:

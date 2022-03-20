@@ -1,11 +1,14 @@
 package ru.realityfamily.userservice.web.controller;
 
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ru.realityfamily.userservice.service.keycloack.KeyCloakService;
-import ru.realityfamily.userservice.web.dto.UserDTO;
+import ru.realityfamily.userservice.web.dto.UserRequest;
+import ru.realityfamily.userservice.web.dto.UserResponse;
 
 import java.util.List;
 
@@ -15,41 +18,55 @@ public class UserController {
 
 
     @Autowired
-    KeyCloakService service;
+    KeyCloakService keycloakService;
+
+    @Autowired
+    @Qualifier("defaultMapper")
+    ModelMapper mapper;
 
     @PostMapping
-    public String addUser(@RequestBody UserDTO userDTO){
-        service.addUser(userDTO);
-        return "User Added Successfully.";
+    public UserResponse addUser(@RequestBody UserRequest userreq) {
+        return mapper.map(keycloakService.addUser(userreq),UserResponse.class);
     }
 
     @GetMapping(path = "/{userName}")
-    public List<UserRepresentation> getUser(@PathVariable("userName") String userName){
-        return service.getUser(userName);
+    public UserResponse getUser(@PathVariable("userName") String userName) {
+        UserRepresentation representation = keycloakService.getUserBuyName(userName);
+        return mapper.map(representation, UserResponse.class);
     }
 
     @PutMapping(path = "/update/{userId}")
-    public String updateUser(@PathVariable("userId") String userId, @RequestBody UserDTO userDTO){
-        service.updateUser(userId, userDTO);
-        return "User Details Updated Successfully.";
+    public UserResponse updateUser(@PathVariable("userId") String userId, @RequestBody UserRequest userDTO) {
+        return mapper.map(keycloakService.updateUser(userId, userDTO), UserResponse.class);
+
     }
 
     @DeleteMapping(path = "/delete/{userId}")
-    public String deleteUser(@PathVariable("userId") String userId){
-        service.deleteUser(userId);
+    public String deleteUser(@PathVariable("userId") String userId) {
+        keycloakService.deleteUser(userId);
         return "User Deleted Successfully.";
     }
 
     @GetMapping(path = "/verification-link/{userId}")
-    public String sendVerificationLink(@PathVariable("userId") String userId){
-        service.sendVerificationLink(userId);
+    public String sendVerificationLink(@PathVariable("userId") String userId) {
+        keycloakService.sendVerificationLink(userId);
         return "Verification Link Send to Registered E-mail Id.";
     }
 
     @GetMapping(path = "/reset-password/{userId}")
-    public String sendResetPassword(@PathVariable("userId") String userId){
-        service.sendResetPassword(userId);
+    public String sendResetPassword(@PathVariable("userId") String userId) {
+        keycloakService.sendResetPassword(userId);
         return "Reset Password Link Send Successfully to Registered E-mail Id.";
+    }
+
+    @GetMapping(path = "/{username}/realmRoles")
+    public List<RoleRepresentation> getRolesOfClient(@PathVariable("username") String username) {
+        return keycloakService.getUserRolesRealmByName(username);
+    }
+
+    @GetMapping(path = "/roles")
+    public List<org.keycloak.representations.idm.RoleRepresentation> getAllRoles() {
+        return keycloakService.getRolesAll();
     }
 
 }

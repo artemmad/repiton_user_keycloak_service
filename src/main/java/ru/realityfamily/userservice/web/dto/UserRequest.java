@@ -2,15 +2,18 @@ package ru.realityfamily.userservice.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Data
-public class UserDTO {
+@NoArgsConstructor
+public class UserRequest {
     private String userName;
-    private String emailId;
+    private String email;
     private String password;
     private String firstname;
     private String lastName;
+    private List<String> groupsNames;
 }

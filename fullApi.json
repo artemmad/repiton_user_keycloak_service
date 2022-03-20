@@ -1,0 +1,1405 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "FullApiForIngressSpec",
+    "description": "Полное описание Api для Repiton",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https"
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Запрос на утентификацию для юзеров",
+        "requestBody": {
+          "description": "JSON representation of the realm",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserAuth"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "login": "lolkek",
+                    "password": "123567"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "2XX": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAuthResponse"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseError"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Auth error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/teacher/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "id of teacher",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Auth error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseError"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "msg": "Произошла ошибка аутентификации"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          },
+          "2XX": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeacherResp"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": 0,
+                      "name": "string",
+                      "lastName": "string",
+                      "fatherName": "string",
+                      "birthstring": "string",
+                      "email": "string",
+                      "telephone": "string",
+                      "imageUrl": "string",
+                      "education": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseError"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "msg": "Внутренняя ошибка сервера"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Teacher"
+        ]
+      },
+      "put": {
+        "summary": "",
+        "operationId": "put-teacher-id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeacherResp"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeacherReq"
+              }
+            }
+          }
+        },
+        "description": "Обновить информацию по преподу"
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-teacher-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Удалить выбранного преподавателя"
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/teacher": {
+      "post": {
+        "tags": [
+          "Teacher"
+        ],
+        "description": "Добавить нового учителя",
+        "requestBody": {
+          "description": "Модель нового учителя",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeacherReq"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "name": "string",
+                    "lastName": "string",
+                    "fatherName": "string",
+                    "birthstring": "string",
+                    "email": "string",
+                    "telephone": "string",
+                    "imageUrl": "string",
+                    "education": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "2XX": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeacherResp"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": 0,
+                      "name": "string",
+                      "lastName": "string",
+                      "fatherName": "string",
+                      "birthstring": "string",
+                      "email": "string",
+                      "telephone": "string",
+                      "imageUrl": "string",
+                      "education": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseError"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Auth error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "",
+        "operationId": "get-teacher",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TeacherResp"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Получить всех учителей системы",
+        "tags": [
+          "Teacher"
+        ]
+      }
+    },
+    "/teacher/{id}/statistics/": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Teacher"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialStatistic"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-teacher-statistics",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "dateFrom",
+            "description": "Дата начала отсчета для отчета",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "dateTo",
+            "description": "Дата окончания отсчета для отчета",
+            "required": true
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID учителя в нашей системе"
+        }
+      ]
+    },
+    "/teacher/{id}/timetable": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Teacher"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Discipline"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-teacher-id-lessons",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "dateFrom",
+            "description": "от какой даты считать расписание",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "dateTo",
+            "description": "до какой даты считать расписание",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/student": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Student"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Student"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-student",
+        "description": "Получить всех студентов в системе"
+      },
+      "post": {
+        "summary": "",
+        "operationId": "post-student",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Student"
+                }
+              }
+            }
+          }
+        },
+        "description": "Создать нового студента в системе",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Student"
+              }
+            }
+          },
+          "description": ""
+        }
+      }
+    },
+    "/student/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Student"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Student"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-student-id",
+        "description": "Получить инфу о выбранном студенте"
+      },
+      "put": {
+        "summary": "",
+        "operationId": "put-student-id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Student"
+                }
+              }
+            }
+          }
+        },
+        "description": "Обновить инфу о студенте",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Student"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-student-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "description": ""
+        }
+      }
+    },
+    "/student/{id}/statistics": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Student"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearnStatistics"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-student-id-statistics",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "dateFrom",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "dateTo",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/student/{id}/timetable": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "Student"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Discipline"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-student-id-timetable",
+        "description": "Получить лист дисциплин студента"
+      }
+    },
+    "/lesson/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lesson"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-lesson-id",
+        "tags": [
+          "Lessons"
+        ]
+      },
+      "put": {
+        "summary": "",
+        "operationId": "put-lesson-id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Lesson"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Lesson"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/discipline": {
+      "post": {
+        "summary": "",
+        "operationId": "post-descipline",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Discipline"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Discipline"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "id": "string",
+                    "teacher": {
+                      "id": 0,
+                      "name": "string",
+                      "lastName": "string",
+                      "fatherName": "string",
+                      "birthstring": "string",
+                      "email": "string",
+                      "telephone": "string",
+                      "imageUrl": "string",
+                      "education": "string"
+                    },
+                    "student": {
+                      "id": 0,
+                      "name": "string",
+                      "lastName": "string",
+                      "birthstring": "string",
+                      "email": "string",
+                      "telephone": "string",
+                      "imageUrl": "string",
+                      "education": "string",
+                      "price": 0,
+                      "hours": 0,
+                      "parent": [
+                        {
+                          "id": 0,
+                          "name": "string",
+                          "lastName": "string",
+                          "fatherName": "string",
+                          "telephone": "string"
+                        }
+                      ]
+                    },
+                    "lessons": [
+                      {
+                        "id": "string",
+                        "name": "string",
+                        "dateTimeStart": "string",
+                        "dateTimeEnd": "string",
+                        "description": "string",
+                        "homeTask": {
+                          "id": "string",
+                          "mark": "string",
+                          "makrDescription": "string",
+                          "descriptiion": "string",
+                          "type": "string",
+                          "test": {
+                            "id": "string"
+                          },
+                          "files": [
+                            "string"
+                          ]
+                        },
+                        "status": "string"
+                      }
+                    ],
+                    "name": "string",
+                    "rocketChatReference": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "DisciplineLesson"
+        ]
+      },
+      "parameters": []
+    },
+    "/discipline/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "DisciplineLesson"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Discipline"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-descipline-id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Discipline"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "",
+        "operationId": "put-descipline-id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Discipline"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Discipline"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-discipline-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/lesson/{id}/startLesson": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "DisciplineLesson"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "description": "Url для доступа в занятие в mitJitSi"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-lesson-id-startLesson",
+        "description": "Для старта занятия в meetJitsi (создание комнаты)"
+      }
+    },
+    "/lesson/{id}/endLesson": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "DisciplineLesson"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "operationId": "get-lesson-id-endLesson",
+        "description": "Закончить занятие в jitsi"
+      }
+    },
+    "/lesson/{id}/hometask": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "post": {
+        "summary": "",
+        "operationId": "post-lesson-id-hometask",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeTask"
+                }
+              }
+            }
+          }
+        },
+        "description": "Создать домашку для студента по его занятию",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HomeTask"
+              }
+            }
+          },
+          "description": ""
+        },
+        "tags": [
+          "DisciplineLesson"
+        ]
+      },
+      "put": {
+        "summary": "",
+        "operationId": "put-lesson-id-hometask",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeTask"
+                }
+              }
+            }
+          }
+        },
+        "description": "Обновоить домашку студента по его занятию",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HomeTask"
+              }
+            }
+          }
+        },
+        "tags": [
+          "DisciplineLesson"
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "access_token": []
+    }
+  ],
+  "components": {
+    "schemas": {
+      "UserAuthResponse": {
+        "type": "object",
+        "description": "",
+        "x-examples": {},
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "refresh": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            }
+          }
+        }
+      },
+      "ResponseError": {
+        "type": "object",
+        "properties": {
+          "msg": {
+            "type": "string"
+          }
+        }
+      },
+      "UserAuth": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "TeacherResp": {
+        "description": "Модель учителя которой надо ответить на сохранение, полная",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "fatherName": {
+            "type": "string"
+          },
+          "birthstring": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "telephone": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "education": {
+            "type": "string"
+          }
+        }
+      },
+      "TeacherReq": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "fatherName": {
+            "type": "string"
+          },
+          "birthstring": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "telephone": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "education": {
+            "type": "string"
+          }
+        }
+      },
+      "Student": {
+        "description": "Модель студента которой надо ответить на сохранение, полная",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "birthstring": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "telephone": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "education": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "hours": {
+            "description": "Колличество часов которое мамашка хочет чтобы ее личинус занимался в неделю",
+            "type": "integer"
+          },
+          "parent": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parent"
+            }
+          }
+        }
+      },
+      "Parent": {
+        "description": "Модель мамаши которая прикреплена к школьнику. В аутентификациях никак не участвует",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "fatherName": {
+            "type": "string"
+          },
+          "telephone": {
+            "type": "string"
+          }
+        }
+      },
+      "FinancialStatistic": {
+        "description": "Модель финансовой статистики по конкретному преподу. Доступна только админу и преподу",
+        "type": "object",
+        "properties": {
+          "allLessons": {
+            "description": "Колличество занятий проведенных за промежуток времени",
+            "type": "integer"
+          },
+          "allPrice": {
+            "description": "Коммулятивная стоимость занятий в суммме",
+            "type": "number"
+          }
+        }
+      },
+      "Role": {
+        "title": "Role",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "roleName": {
+            "type": "string"
+          }
+        },
+        "description": "Роль внутри системы"
+      },
+      "StudentFinancialStaticstics": {
+        "title": "StudentFinancialStaticstics",
+        "type": "object",
+        "description": "Статистика преподавателя по конкретному студенту с его занятиями",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "presents": {
+            "type": "integer"
+          },
+          "student": {
+            "$ref": "#/components/schemas/StudentFinancialPart"
+          },
+          "lessons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Lesson"
+            }
+          }
+        }
+      },
+      "StudentFinancialPart": {
+        "title": "StudentFinancialPart",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          }
+        },
+        "description": "Урезанный студент для статистики преподавателя"
+      },
+      "Lesson": {
+        "title": "Lesson",
+        "type": "object",
+        "description": "",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "description": "Название урока, препод именует уроки сам как он захочет. По умолчанию генерится в формате Урок №<номер занятия по дисциплине у ученика с этим преподом>"
+          },
+          "dateTimeStart": {
+            "type": "string",
+            "description": "Время начала занятий с датой и часами"
+          },
+          "dateTimeEnd": {
+            "type": "string",
+            "description": "Время конца занятий с датой и часами"
+          },
+          "description": {
+            "type": "string",
+            "description": "Описание урока. Что будут рассматривать и как, просто тектовое поле"
+          },
+          "homeTask": {
+            "$ref": "#/components/schemas/HomeTask"
+          },
+          "status": {
+            "type": "string",
+            "description": "Enum состояний урока (\"отменен преподом\", \"отменен студентом\", \"перенесен\", \"проведен\", \"планируется\" )"
+          }
+        }
+      },
+      "LearnStatistics": {
+        "title": "LearnStatistics",
+        "type": "object",
+        "description": "Конеретная статистика студента по его обучению",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "allPresents": {
+            "type": "integer",
+            "description": "Колличество посещенных занятий. Генерируется на лету и не хранится в бд. "
+          },
+          "allHomeTasks": {
+            "type": "integer",
+            "description": "Общее колличество выполненных домашних заданий по урокам. Поле генерится на лету из состояния домашнего задания. В бд хранятся только статусы домашек по проведенному занятию\nЕсли оценка стоит  - оно выполнено"
+          },
+          "disciplines": {
+            "type": "array",
+            "description": "Массив дисциплин по которым были проведены занятия с данным студентом в выделенный промежуток времени",
+            "items": {
+              "$ref": "#/components/schemas/Discipline"
+            }
+          }
+        }
+      },
+      "Discipline": {
+        "title": "Discipline",
+        "type": "object",
+        "description": "Модель дисциплины по которой проводятся занятия",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "teacher": {
+            "$ref": "#/components/schemas/TeacherResp"
+          },
+          "student": {
+            "$ref": "#/components/schemas/Student"
+          },
+          "lessons": {
+            "type": "array",
+            "description": "Уроки проведенные по этой дисциплине для этого препода и этого ученика. На создании не присылается",
+            "items": {
+              "$ref": "#/components/schemas/Lesson"
+            }
+          },
+          "name": {
+            "type": "string",
+            "description": "Название дисциплины"
+          },
+          "rocketChatReference": {
+            "type": "string",
+            "description": "Ссылка на чатик в RocketChat в котором студент общается с преподом. На создании не присылается"
+          }
+        }
+      },
+      "DisciplineForLearnStatistics": {
+        "title": "DisciplineForLearnStatistics",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "teacher": {
+            "$ref": "#/components/schemas/TeacherResp"
+          },
+          "student": {
+            "$ref": "#/components/schemas/Student"
+          },
+          "lessons": {
+            "type": "array",
+            "description": "Уроки проведенные по этой дисциплине для этого препода и этого ученика",
+            "items": {
+              "$ref": "#/components/schemas/Lesson"
+            }
+          },
+          "name": {
+            "type": "string",
+            "description": "Название дисциплины"
+          },
+          "presents": {
+            "type": "integer",
+            "description": "Колличество посещенний занятий по отдельной дисциплине. Генерируется на лету из статусов занятий и не хранится в бд"
+          },
+          "homeTask": {
+            "type": "integer",
+            "description": "Колличество выполеннных домашек по отдельной дисциплине. Генерится на лету из статусов домашек"
+          }
+        }
+      },
+      "HomeTask": {
+        "title": "HomeTask",
+        "type": "object",
+        "description": "Модель домашнего задания которые накидали школьнику по занятию",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "mark": {
+            "type": "string",
+            "description": "Если нет оценки ученик идет нахуй и статус не выполнено. Препод ворочает только оценку"
+          },
+          "makrDescription": {
+            "type": "string",
+            "description": "Комментарий к поставленной оценке"
+          },
+          "descriptiion": {
+            "type": "string",
+            "description": "Поле в котором препод текстом описывает задание"
+          },
+          "type": {
+            "type": "string",
+            "description": "Enum в котором говорим какой вид задания был выдан (\"тест\", \"задание\")"
+          },
+          "test": {
+            "$ref": "#/components/schemas/Test"
+          },
+          "files": {
+            "type": "array",
+            "description": "Набор ссылок в s3 на фотографии/файлов которые ученик прикладывает к своему дз",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Test": {
+        "title": "Test",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "description": "Теста который назначили как дз (Пока пустой надо доделать )"
+      }
+    }
+  }
+}
