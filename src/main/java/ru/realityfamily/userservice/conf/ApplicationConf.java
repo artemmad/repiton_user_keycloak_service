@@ -1,5 +1,7 @@
 package ru.realityfamily.userservice.conf;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.servers.Server;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.keycloak.OAuth2Constants;
@@ -13,7 +15,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
@@ -75,6 +80,15 @@ public class ApplicationConf {
     @Bean
     public KeycloakSpringBootConfigResolver keycloakConfigResolver() {
         return new KeycloakSpringBootConfigResolver();
+    }
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        Server serverThrowGateway = new Server();
+        serverThrowGateway.setUrl("http://localhost:9101/userservice");
+        Server serverWithoutGateway = new Server();
+        serverWithoutGateway.setUrl("http://localhost:9100/userservice");
+        return new OpenAPI().servers(List.of(serverThrowGateway, serverWithoutGateway));
     }
 
 }
