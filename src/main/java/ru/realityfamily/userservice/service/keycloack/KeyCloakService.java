@@ -1,27 +1,52 @@
 package ru.realityfamily.userservice.service.keycloack;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
+import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RoleScopeResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.authorization.client.AuthzClient;
+import org.keycloak.authorization.client.Configuration;
+import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.GroupRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.realityfamily.userservice.conf.KeycloakConfig;
 import ru.realityfamily.userservice.service.keycloack.entity.Credentials;
+import ru.realityfamily.userservice.web.dto.UserLoginRequest;
 import ru.realityfamily.userservice.web.dto.UserRequest;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Service
+@NoArgsConstructor
 public class KeyCloakService {
 
+    @Autowired
+    private Keycloak keycloak;
+
+    @Value("${keycloak.auth-server-url}")
+    private String serverUrl; //ссылку от корня еще до контроллера auth всегда, я не ебу почему, но они это считают корнем своего проекта ¯\_(ツ)_/¯
+
+    @Value("${keycloak.realm}")
+    private String realm;
+
+    @Value("${keycloak.resource}")
+    private String clientId;
+
+    @Value("${keycloak.credentials.secret}")
+    private String clientSecret;
 
     public UserRepresentation addUser(UserRequest userDTO) {
         CredentialRepresentation credential = Credentials
@@ -51,7 +76,7 @@ public class KeyCloakService {
     public UserRepresentation getUserById(String id) {
         UserResource userResource = getInstanceUsersResource().get(id);
         UserRepresentation representation = userResource.toRepresentation();
-       return addRoleAndGroupToUserRepresentation(representation);
+        return addRoleAndGroupToUserRepresentation(representation);
     }
 
     public UserRepresentation getUserBuyName(String userName) {
@@ -128,13 +153,33 @@ public class KeyCloakService {
                 .executeActionsEmail(List.of("UPDATE_PASSWORD"));
     }
 
+    @SneakyThrows
+    public AccessTokenResponse getAuthToken(UserLoginRequest userLoginRequest) {
+        Map<String, Object> clientCredentials = new HashMap<>();
+        clientCredentials.put("secret", clientSecret);
+        clientCredentials.put("grant_type", "password");
+
+        Configuration configuration =
+                new Configuration(serverUrl, realm, clientId, clientCredentials, null);
+        AuthzClient authzClient = AuthzClient.create(configuration);
+
+        if (userLoginRequest.getUsername()!= null && !userLoginRequest.getUsername().isEmpty()) {
+            return authzClient.obtainAccessToken(userLoginRequest.getUsername(), userLoginRequest.getPassword());
+        } else if (userLoginRequest.getEmail()!= null && !userLoginRequest.getEmail().isEmpty()) {
+            return authzClient.obtainAccessToken(userLoginRequest.getEmail(), userLoginRequest.getPassword());
+        } else {
+            throw new UnsupportedOperationException("There is no username or email in request");
+        }
+
+    }
+
     public UsersResource getInstanceUsersResource() {
-        return KeycloakConfig.getInstance().realm(KeycloakConfig.realm).users();
+        return keycloak.realm(realm).users();
     }
 
 
     public RolesResource getInstanceRolesResource() {
-        return KeycloakConfig.getInstance().realm(KeycloakConfig.realm).roles();
+        return keycloak.realm(realm).roles();
     }
 
 

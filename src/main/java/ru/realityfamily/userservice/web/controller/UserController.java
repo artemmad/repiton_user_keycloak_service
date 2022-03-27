@@ -5,12 +5,16 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.realityfamily.userservice.service.keycloack.KeyCloakService;
+import ru.realityfamily.userservice.web.dto.UserLoginRequest;
 import ru.realityfamily.userservice.web.dto.UserRequest;
 import ru.realityfamily.userservice.web.dto.UserResponse;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -67,6 +71,11 @@ public class UserController {
     @GetMapping(path = "/roles")
     public List<org.keycloak.representations.idm.RoleRepresentation> getAllRoles() {
         return keycloakService.getRolesAll();
+    }
+
+    @PostMapping(path = "/signin")
+    public ResponseEntity<?> signin(@RequestBody UserLoginRequest userLoginRequest) {
+        return ResponseEntity.ok(keycloakService.getAuthToken(userLoginRequest));
     }
 
 }

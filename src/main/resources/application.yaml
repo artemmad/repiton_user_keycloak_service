@@ -60,6 +60,25 @@ spring:
 #  api:
 #    url: http://localhost:8085/auth/
 
+keycloak-admin:
+  serverurl: http://localhost:8085/auth
+  realm: repiton
+  clientid: admin-cli
+  clientsecret: r486NQgMRmlcJyzwYXH6aQxww52uvery
+
+keycloak:
+  realm: repiton
+  auth-server-url: http://localhost:8085/auth
+  ssl-required: external
+  public-client: true
+  #keycloak resource is the client ID
+  resource: admin-cli
+  use-resource-role-mappings: true
+  #The line below will prevent redirect to login page
+  bearer-only: true
+  connection-timeout: 6000
+  credentials:
+    secret: r486NQgMRmlcJyzwYXH6aQxww52uvery
 
 
 logging:

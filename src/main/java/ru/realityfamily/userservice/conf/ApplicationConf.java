@@ -1,8 +1,15 @@
 package ru.realityfamily.userservice.conf;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.keycloak.OAuth2Constants;
+import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +18,18 @@ import org.springframework.web.client.RestTemplate;
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @Configuration
+@AllArgsConstructor
+@NoArgsConstructor
 public class ApplicationConf {
+    @Value("${keycloak.auth-server-url}")
+    private String serverUrl; //ссылку от корня еще до контроллера auth всегда, я не ебу почему, но они это считают корнем своего проекта ¯\_(ツ)_/¯
+    @Value("${keycloak.realm}")
+    private String realm;
+    @Value("${keycloak.resource}")
+    private String clientId;
+    @Value("${keycloak.credentials.secret}")
+    private String clientSecret;
+//    final static String userName = "admin";
 
     @Bean(name = "patchingMapper")
     ModelMapper patchingModelMapper() {
@@ -34,6 +52,29 @@ public class ApplicationConf {
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
         return mapper;
+    }
+
+    @Bean
+    public Keycloak keyCloak() {
+
+        Keycloak keycloak = KeycloakBuilder.builder()
+                    .serverUrl(serverUrl)
+                    .realm(realm)
+                    .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                    //.username(userName)
+                    //.password(password)
+                    .clientId(clientId)
+                    .clientSecret(clientSecret)
+//                    .resteasyClient(new ResteasyClientBuilder()
+//                            .connectionPoolSize(10)
+//                            .build())
+                    .build();
+        return keycloak;
+    }
+
+    @Bean
+    public KeycloakSpringBootConfigResolver keycloakConfigResolver() {
+        return new KeycloakSpringBootConfigResolver();
     }
 
 }
