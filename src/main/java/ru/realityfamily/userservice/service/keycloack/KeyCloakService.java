@@ -168,7 +168,7 @@ public class KeyCloakService {
         } else if (userLoginRequest.getEmail()!= null && !userLoginRequest.getEmail().isEmpty()) {
             return authzClient.obtainAccessToken(userLoginRequest.getEmail(), userLoginRequest.getPassword());
         } else {
-            throw new UnsupportedOperationException("There is no username or email in request");
+            throw new UnsupportedOperationException("There is no username or email in request. If email and username provided, username have priority");
         }
 
     }

@@ -75,7 +75,14 @@ public class UserController {
 
     @PostMapping(path = "/signin")
     public ResponseEntity<?> signin(@RequestBody UserLoginRequest userLoginRequest) {
-        return ResponseEntity.ok(keycloakService.getAuthToken(userLoginRequest));
+        try{
+        return ResponseEntity.ok(keycloakService.getAuthToken(userLoginRequest));}
+        catch(UnsupportedOperationException e){
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
+        catch(Exception e){
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 
 }

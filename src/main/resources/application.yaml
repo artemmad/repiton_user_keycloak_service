@@ -60,11 +60,6 @@ spring:
 #  api:
 #    url: http://localhost:8085/auth/
 
-keycloak-admin:
-  serverurl: http://localhost:8085/auth
-  realm: repiton
-  clientid: admin-cli
-  clientsecret: r486NQgMRmlcJyzwYXH6aQxww52uvery
 
 keycloak:
   realm: repiton
