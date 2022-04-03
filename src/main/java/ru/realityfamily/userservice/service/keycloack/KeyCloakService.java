@@ -20,10 +20,7 @@ import ru.realityfamily.userservice.web.dto.UserLoginRequest;
 import ru.realityfamily.userservice.web.dto.UserRequest;
 
 import javax.ws.rs.core.Response;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -50,7 +47,7 @@ public class KeyCloakService {
                 .createPasswordCredentials(userDTO.getPassword());
         UserRepresentation user = new UserRepresentation();
         user.setUsername(userDTO.getUserName());
-        user.setFirstName(userDTO.getFirstname());
+        user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         user.setCredentials(Collections.singletonList(credential));
@@ -82,6 +79,19 @@ public class KeyCloakService {
 
         //add not included fields like realmRoles and groups
         return addRoleAndGroupToUserRepresentation(representation);
+    }
+
+    public List<UserRepresentation> getUsersByGroupName(String groupName) {
+        GroupsResource groupsResource = getInstanceGroupsResource();
+        List<GroupRepresentation> groupRepresentations = groupsResource.groups(groupName, 0,1);
+        GroupResource group = groupsResource.group(groupRepresentations.get(0).getId());
+        return group.members();
+    }
+
+    public List<UserRepresentation> getUsersByGroupId(String groupId) {
+        GroupsResource groupsResource = getInstanceGroupsResource();
+        GroupResource group = groupsResource.group(groupId);
+        return group.members();
     }
 
     /***
@@ -126,7 +136,7 @@ public class KeyCloakService {
                 .createPasswordCredentials(userDTO.getPassword());
         UserRepresentation user = new UserRepresentation();
         user.setUsername(userDTO.getUserName());
-        user.setFirstName(userDTO.getFirstname());
+        user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         user.setCredentials(Collections.singletonList(credential));
@@ -213,6 +223,7 @@ public class KeyCloakService {
     public GroupsResource getInstanceGroupsResource() {
         return keycloak.realm(realm).groups();
     }
+
 
 
 }

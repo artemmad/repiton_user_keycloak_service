@@ -13,7 +13,7 @@ public class UserRequest {
     private String userName;
     private String email;
     private String password;
-    private String firstname;
+    private String firstName;
     private String lastName;
     private List<String> groupsNames;
 }

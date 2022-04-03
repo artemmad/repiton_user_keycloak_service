@@ -1,5 +1,6 @@
 package ru.realityfamily.userservice.web.controller;
 
+import org.apache.catalina.User;
 import org.keycloak.representations.idm.GroupRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -16,7 +17,7 @@ import ru.realityfamily.userservice.web.dto.UserResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+//@RequestMapping("/user")
 public class UserController {
 
 
@@ -29,7 +30,7 @@ public class UserController {
 
 
     // SUPPORT FOR SIGN IN
-    @PostMapping(path = "/signin")
+    @PostMapping(path = "/user/signin")
     public ResponseEntity<?> signin(@RequestBody UserLoginRequest userLoginRequest) {
         try{
             return ResponseEntity.ok(keycloakService.getAuthToken(userLoginRequest));}
@@ -43,44 +44,57 @@ public class UserController {
 
 
     /// USER
-    @PostMapping
+    @PostMapping("/user")
     public UserResponse addUser(@RequestBody UserRequest userreq) {
         return mapper.map(keycloakService.addUser(userreq),UserResponse.class);
     }
 
-    @GetMapping(path = "/{userName}")
+    @GetMapping(path = "/user/{userName}")
     public UserResponse getUser(@PathVariable("userName") String userName) {
         UserRepresentation representation = keycloakService.getUserBuyName(userName);
         return mapper.map(representation, UserResponse.class);
     }
 
-    @PutMapping(path = "/update/{userId}")
+    @PutMapping(path = "/user/update/{userId}")
     public UserResponse updateUser(@PathVariable("userId") String userId, @RequestBody UserRequest userDTO) {
         return mapper.map(keycloakService.updateUser(userId, userDTO), UserResponse.class);
-
     }
 
-    @DeleteMapping(path = "/delete/{userId}")
+    @DeleteMapping(path = "/user/delete/{userId}")
     public String deleteUser(@PathVariable("userId") String userId) {
         keycloakService.deleteUser(userId);
         return "User Deleted Successfully.";
     }
 
-    @GetMapping(path = "/verification-link/{userId}")
+    @GetMapping(path = "/user/verification-link/{userId}")
     public String sendVerificationLink(@PathVariable("userId") String userId) {
         keycloakService.sendVerificationLink(userId);
         return "Verification Link Send to Registered E-mail Id.";
     }
 
-    @GetMapping(path = "/reset-password/{userId}")
+    @GetMapping(path = "/user/reset-password/{userId}")
     public String sendResetPassword(@PathVariable("userId") String userId) {
         keycloakService.sendResetPassword(userId);
         return "Reset Password Link Send Successfully to Registered E-mail Id.";
     }
 
 
+    /// USERS
+    @GetMapping(path = "/users/byGroupName/{group_name}")
+    public List<UserResponse> getUsersByGroupName(@PathVariable("group_name") String groupName) {
+        List<UserRepresentation> representations = keycloakService.getUsersByGroupName(groupName);
+        return representations.stream().map( representation -> mapper.map(representation, UserResponse.class)).toList();
+    }
+
+    @GetMapping(path = "/users/byGroupId/{group_id}")
+    public List<UserResponse> getUsersByGroupId(@PathVariable("group_id") String groupId) {
+        List<UserRepresentation> representations = keycloakService.getUsersByGroupId(groupId);
+        return representations.stream().map( representation -> mapper.map(representation, UserResponse.class)).toList();
+    }
+
+
     /// ROLES
-    @GetMapping(path = "realmRoles/byUserName/{username}")
+    @GetMapping(path = "/realmRoles/byUserName/{username}")
     public List<RoleRepresentation> getRolesOfClient(@PathVariable("username") String username) {
         return keycloakService.getUserRolesRealmByName(username);
     }
