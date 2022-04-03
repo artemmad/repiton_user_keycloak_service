@@ -49,9 +49,15 @@ public class UserController {
         return mapper.map(keycloakService.addUser(userreq),UserResponse.class);
     }
 
-    @GetMapping(path = "/user/{userName}")
-    public UserResponse getUser(@PathVariable("userName") String userName) {
+    @GetMapping(path = "/user/byUsername/{userName}")
+    public UserResponse getUserByUsername(@PathVariable("userName") String userName) {
         UserRepresentation representation = keycloakService.getUserBuyName(userName);
+        return mapper.map(representation, UserResponse.class);
+    }
+
+    @GetMapping(path = "/user/byKeyCloakId/{id}")
+    public UserResponse getUserByKeycloakId(@PathVariable("id") String id) {
+        UserRepresentation representation = keycloakService.getUserById(id);
         return mapper.map(representation, UserResponse.class);
     }
 
