@@ -1,5 +1,6 @@
 package ru.realityfamily.userservice.web.controller;
 
+import org.keycloak.representations.idm.GroupRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.modelmapper.ModelMapper;
@@ -12,9 +13,7 @@ import ru.realityfamily.userservice.web.dto.UserLoginRequest;
 import ru.realityfamily.userservice.web.dto.UserRequest;
 import ru.realityfamily.userservice.web.dto.UserResponse;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -28,6 +27,22 @@ public class UserController {
     @Qualifier("defaultMapper")
     ModelMapper mapper;
 
+
+    // SUPPORT FOR SIGN IN
+    @PostMapping(path = "/signin")
+    public ResponseEntity<?> signin(@RequestBody UserLoginRequest userLoginRequest) {
+        try{
+            return ResponseEntity.ok(keycloakService.getAuthToken(userLoginRequest));}
+        catch(UnsupportedOperationException e){
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
+        catch(Exception e){
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
+    }
+
+
+    /// USER
     @PostMapping
     public UserResponse addUser(@RequestBody UserRequest userreq) {
         return mapper.map(keycloakService.addUser(userreq),UserResponse.class);
@@ -63,9 +78,16 @@ public class UserController {
         return "Reset Password Link Send Successfully to Registered E-mail Id.";
     }
 
-    @GetMapping(path = "/{username}/realmRoles")
+
+    /// ROLES
+    @GetMapping(path = "realmRoles/byUserName/{username}")
     public List<RoleRepresentation> getRolesOfClient(@PathVariable("username") String username) {
         return keycloakService.getUserRolesRealmByName(username);
+    }
+
+    @GetMapping(path = "/realmRoles/byUserId/{user_id}")
+    public List<RoleRepresentation> getRolesOfUserByUserId(@PathVariable("user_id") String userId) {
+        return keycloakService.getUserRolesRealmByUserId(userId);
     }
 
     @GetMapping(path = "/roles")
@@ -73,16 +95,21 @@ public class UserController {
         return keycloakService.getRolesAll();
     }
 
-    @PostMapping(path = "/signin")
-    public ResponseEntity<?> signin(@RequestBody UserLoginRequest userLoginRequest) {
-        try{
-        return ResponseEntity.ok(keycloakService.getAuthToken(userLoginRequest));}
-        catch(UnsupportedOperationException e){
-            return ResponseEntity.status(401).body(e.getMessage());
-        }
-        catch(Exception e){
-            return ResponseEntity.status(401).body(e.getMessage());
-        }
+
+    /// GROUPS
+    @GetMapping(path = "/groups")
+    public List<GroupRepresentation> getAllGroups() {
+        return keycloakService.getAllGroups();
+    }
+
+    @GetMapping(path = "/groups/byUserName/{username}")
+    public List<GroupRepresentation> getGroupsOfUserByName(@PathVariable("username") String username){
+        return keycloakService.getUserGroupsByName(username);
+    }
+
+    @GetMapping(path = "/groups/byUserId/{user_id}")
+    public List<GroupRepresentation> getGroupsOfUserById(@PathVariable("user_id") String userId){
+        return keycloakService.getUserGroupsById(userId);
     }
 
 }

@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.resource.RoleScopeResource;
-import org.keycloak.admin.client.resource.RolesResource;
-import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.admin.client.resource.*;
 import org.keycloak.authorization.client.AuthzClient;
 import org.keycloak.authorization.client.Configuration;
 import org.keycloak.representations.AccessTokenResponse;
@@ -111,6 +108,13 @@ public class KeyCloakService {
         return rolesResource.listEffective();
     }
 
+    public List<RoleRepresentation> getUserRolesRealmByUserId(String userId) {
+        UsersResource usersResource = getInstanceUsersResource();
+        UserResource userResource = usersResource.get(userId);
+        RoleScopeResource rolesResource = userResource.roles().realmLevel();
+        return rolesResource.listEffective();
+    }
+
     public List<org.keycloak.representations.idm.RoleRepresentation> getRolesAll() {
         RolesResource rolesResource = getInstanceRolesResource();
         return rolesResource.list();
@@ -173,13 +177,41 @@ public class KeyCloakService {
 
     }
 
+
+
+    /// GROUPS
+    public List<GroupRepresentation> getAllGroups() {
+        GroupsResource groupsResource = getInstanceGroupsResource();
+        return groupsResource.groups();
+    }
+
+    public List<GroupRepresentation> getUserGroupsByName(String username) {
+        UsersResource usersResource = getInstanceUsersResource();
+        UserRepresentation userRepresentation = usersResource.search(username, true).get(0);
+        UserResource userResource = usersResource.get(userRepresentation.getId());
+        List<GroupRepresentation> groups = userResource.groups();
+        return groups;
+    }
+
+
+    public List<GroupRepresentation> getUserGroupsById(String userId) {
+        UsersResource usersResource = getInstanceUsersResource();
+        UserResource userResource = usersResource.get(userId);
+        List<GroupRepresentation> groups = userResource.groups();
+        return groups;
+    }
+
+
     public UsersResource getInstanceUsersResource() {
         return keycloak.realm(realm).users();
     }
 
-
     public RolesResource getInstanceRolesResource() {
         return keycloak.realm(realm).roles();
+    }
+
+    public GroupsResource getInstanceGroupsResource() {
+        return keycloak.realm(realm).groups();
     }
 
 

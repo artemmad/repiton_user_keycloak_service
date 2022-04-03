@@ -177,7 +177,10 @@
             }
           }
         },
-        "description": "Обновить информацию по преподу"
+        "description": "Обновить информацию по преподу",
+        "tags": [
+          "Teacher"
+        ]
       },
       "delete": {
         "summary": "",
@@ -193,7 +196,10 @@
             "description": "Internal Server Error"
           }
         },
-        "description": "Удалить выбранного преподавателя"
+        "description": "Удалить выбранного преподавателя",
+        "tags": [
+          "Teacher"
+        ]
       },
       "parameters": [
         {
@@ -309,11 +315,12 @@
         ]
       }
     },
-    "/teacher/{id}/statistics/": {
+    "/statistics/teacher/{id}": {
       "get": {
         "summary": "Your GET endpoint",
         "tags": [
-          "Teacher"
+          "Teacher",
+          "Statistics"
         ],
         "responses": {
           "200": {
@@ -361,7 +368,7 @@
         }
       ]
     },
-    "/teacher/{id}/timetable": {
+    "/timetable/teacher/{id}": {
       "parameters": [
         {
           "schema": {
@@ -375,7 +382,8 @@
       "get": {
         "summary": "Your GET endpoint",
         "tags": [
-          "Teacher"
+          "Teacher",
+          "Timetable"
         ],
         "responses": {
           "200": {
@@ -464,7 +472,10 @@
             }
           },
           "description": ""
-        }
+        },
+        "tags": [
+          "Student"
+        ]
       }
     },
     "/student/{id}": {
@@ -542,10 +553,13 @@
             }
           },
           "description": ""
-        }
+        },
+        "tags": [
+          "Student"
+        ]
       }
     },
-    "/student/{id}/statistics": {
+    "/statistics/student/{id}": {
       "parameters": [
         {
           "schema": {
@@ -559,7 +573,8 @@
       "get": {
         "summary": "Your GET endpoint",
         "tags": [
-          "Student"
+          "Student",
+          "Statistics"
         ],
         "responses": {
           "200": {
@@ -594,7 +609,7 @@
         ]
       }
     },
-    "/student/{id}/timetable": {
+    "/timetable/student/{id}": {
       "parameters": [
         {
           "schema": {
@@ -608,7 +623,8 @@
       "get": {
         "summary": "Your GET endpoint",
         "tags": [
-          "Student"
+          "Student",
+          "Timetable"
         ],
         "responses": {
           "200": {
@@ -656,7 +672,7 @@
         },
         "operationId": "get-lesson-id",
         "tags": [
-          "Lessons"
+          "DisciplineLesson"
         ]
       },
       "put": {
@@ -682,7 +698,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Lessons"
+        ]
       }
     },
     "/discipline": {
@@ -842,7 +861,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "DisciplineLesson"
+        ]
       },
       "delete": {
         "summary": "",
@@ -851,7 +873,10 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "tags": [
+          "DisciplineLesson"
+        ]
       }
     },
     "/lesson/{id}/startLesson": {
@@ -1050,13 +1075,13 @@
           "fatherName": {
             "type": "string"
           },
-          "birthstring": {
+          "birthDay": {
             "type": "string"
           },
           "email": {
             "type": "string"
           },
-          "telephone": {
+          "phone": {
             "type": "string"
           },
           "imageUrl": {
@@ -1109,13 +1134,13 @@
           "lastName": {
             "type": "string"
           },
-          "birthstring": {
+          "birthDay": {
             "type": "string"
           },
           "email": {
             "type": "string"
           },
-          "telephone": {
+          "phone": {
             "type": "string"
           },
           "imageUrl": {
@@ -1131,7 +1156,7 @@
             "description": "Колличество часов которое мамашка хочет чтобы ее личинус занимался в неделю",
             "type": "integer"
           },
-          "parent": {
+          "parents": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Parent"
@@ -1171,6 +1196,12 @@
           "allPrice": {
             "description": "Коммулятивная стоимость занятий в суммме",
             "type": "number"
+          },
+          "students": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudentFinancialStaticstics"
+            }
           }
         }
       },
@@ -1192,9 +1223,6 @@
         "type": "object",
         "description": "Статистика преподавателя по конкретному студенту с его занятиями",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "price": {
             "type": "number"
           },
@@ -1269,9 +1297,6 @@
         "type": "object",
         "description": "Конеретная статистика студента по его обучению",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "allPresents": {
             "type": "integer",
             "description": "Колличество посещенных занятий. Генерируется на лету и не хранится в бд. "
@@ -1314,36 +1339,19 @@
             "type": "string",
             "description": "Название дисциплины"
           },
-          "rocketChatReference": {
-            "type": "string",
-            "description": "Ссылка на чатик в RocketChat в котором студент общается с преподом. На создании не присылается"
+          "rocketChats": {
+            "description": "Ссылка на чатик в RocketChat в котором студент общается с преподом. На создании не присылается",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RocketChatChannel"
+            }
           }
         }
       },
       "DisciplineForLearnStatistics": {
-        "title": "DisciplineForLearnStatistics",
+        "title": "DisciplineLearnStatistics",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "teacher": {
-            "$ref": "#/components/schemas/TeacherResp"
-          },
-          "student": {
-            "$ref": "#/components/schemas/Student"
-          },
-          "lessons": {
-            "type": "array",
-            "description": "Уроки проведенные по этой дисциплине для этого препода и этого ученика",
-            "items": {
-              "$ref": "#/components/schemas/Lesson"
-            }
-          },
-          "name": {
-            "type": "string",
-            "description": "Название дисциплины"
-          },
           "presents": {
             "type": "integer",
             "description": "Колличество посещенний занятий по отдельной дисциплине. Генерируется на лету из статусов занятий и не хранится в бд"
@@ -1351,6 +1359,9 @@
           "homeTask": {
             "type": "integer",
             "description": "Колличество выполеннных домашек по отдельной дисциплине. Генерится на лету из статусов домашек"
+          },
+          "discipline": {
+            "$ref": "#/components/schemas/Discipline"
           }
         }
       },
@@ -1399,6 +1410,20 @@
           }
         },
         "description": "Теста который назначили как дз (Пока пустой надо доделать )"
+      },
+      "RocketChatChannel": {
+        "title": "RocketChatChannel",
+        "type": "object",
+        "description": "Модель канала в RocketChat. Может расширяться полями по увеличению функционала сервера",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "channelName": {
+            "type": "string",
+            "description": "Имя (id) канала внутри системы RocketChat"
+          }
+        }
       }
     }
   }
