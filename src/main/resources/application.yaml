@@ -38,8 +38,41 @@ spring:
 #    username: udp
 #    password: udp
 
+keycloak:
+  realm: repiton
+  auth-server-url: http://keycloak-svc.keycloak.svc.cluster.local/auth
+  ssl-required: external
+  public-client: true
+  #keycloak resource is the client ID
+  resource: admin-cli
+  use-resource-role-mappings: true
+  #The line below will prevent redirect to login page
+  bearer-only: true
+  connection-timeout: 6000
+  credentials:
+    secret: OSwOhFtSREU1R3kOtz4WYrbdhdu9ZW5G
 
 
+logging:
+  level:
+    ru:
+      udp: DEBUG
+    org:
+      apache:
+        http: DEBUG
+      springframework:
+        web:
+          servlet:
+            mvc: DEBUG
+          client:
+            RestTemplate: DEBUG
+        security: DEBUG
+        jdbc:
+          core:
+            StatementCreatorUtils: DEBUG
+            JdbcTemplate: DEBUG
+  pattern:
+    dateformat: dd-MM-yyyy HH:mm:ss
 ---
 
 spring:
@@ -74,6 +107,63 @@ keycloak:
   connection-timeout: 6000
   credentials:
     secret: r486NQgMRmlcJyzwYXH6aQxww52uvery
+
+
+logging:
+  level:
+    ru:
+      udp: DEBUG
+    org:
+      apache:
+        http: DEBUG
+      springframework:
+        web:
+          servlet:
+            mvc: DEBUG
+          client:
+            RestTemplate: DEBUG
+        security: DEBUG
+        jdbc:
+          core:
+            StatementCreatorUtils: DEBUG
+            JdbcTemplate: DEBUG
+  pattern:
+    dateformat: dd-MM-yyyy HH:mm:ss
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: devLaba
+
+  #  datasource:
+  #    url: jdbc:postgresql://localhost:5432/userservice
+  #    username: postgres
+  #    password: mysecretpassword
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+#keycloak:
+#  api:
+#    url: http://localhost:8085/auth/
+
+
+keycloak:
+  realm: repiton
+  auth-server-url: https://keycloak.repiton.dev.realityfamily.ru:9043/auth
+  ssl-required: external
+  public-client: true
+  #keycloak resource is the client ID
+  resource: admin-cli
+  use-resource-role-mappings: true
+  #The line below will prevent redirect to login page
+  bearer-only: true
+  connection-timeout: 6000
+  credentials:
+    secret: OSwOhFtSREU1R3kOtz4WYrbdhdu9ZW5G
 
 
 logging:

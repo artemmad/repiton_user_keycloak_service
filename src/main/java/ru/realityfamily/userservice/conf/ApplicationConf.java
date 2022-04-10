@@ -82,13 +82,13 @@ public class ApplicationConf {
         return new KeycloakSpringBootConfigResolver();
     }
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        Server serverThrowGateway = new Server();
-        serverThrowGateway.setUrl("http://localhost:9101/userservice");
-        Server serverWithoutGateway = new Server();
-        serverWithoutGateway.setUrl("http://localhost:9100/userservice");
-        return new OpenAPI().servers(List.of(serverThrowGateway, serverWithoutGateway));
-    }
+//    @Bean
+//    public OpenAPI customOpenAPI() {
+//        Server serverThrowGateway = new Server();
+//        serverThrowGateway.setUrl("http://localhost:9101/userservice");
+//        Server serverWithoutGateway = new Server();
+//        serverWithoutGateway.setUrl("http://localhost:9100/userservice");
+//        return new OpenAPI().servers(List.of(serverThrowGateway, serverWithoutGateway));
+//    }
 
 }
