@@ -81,7 +81,7 @@ public class UserController {
     @GetMapping(path = "/user/reset-password/{userId}")
     public String sendResetPassword(@PathVariable("userId") String userId) {
         keycloakService.sendResetPassword(userId);
-        return "Reset Password Link Send Successfully to Registered E-mail Id.";
+        return "Reset Password Link Send Successfully to Registered E-mail for id: " + userId;
     }
 
 
