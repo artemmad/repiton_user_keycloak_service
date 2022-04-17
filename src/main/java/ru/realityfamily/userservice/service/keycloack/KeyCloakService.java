@@ -44,14 +44,19 @@ public class KeyCloakService {
     private String clientSecret;
 
     public UserRepresentation addUser(UserRequest userDTO) {
-        CredentialRepresentation credential = Credentials
-                .createPasswordCredentials(userDTO.getPassword());
+
         UserRepresentation user = new UserRepresentation();
         user.setUsername(userDTO.getUserName());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
-        user.setCredentials(Collections.singletonList(credential));
+
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            CredentialRepresentation credential = Credentials
+                    .createPasswordCredentials(userDTO.getPassword());
+            user.setCredentials(Collections.singletonList(credential));
+        }
+
         user.setEnabled(true);
         user.setGroups(userDTO.getGroupsNames());
 

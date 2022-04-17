@@ -92,7 +92,7 @@ public class ApplicationConf {
         Server serverWithoutGateway = new Server();
         serverWithoutGateway.setUrl("http://localhost:9100/userservice");
         Server serverLabaK8s = new Server();
-        serverWithoutGateway.setUrl("https://backend.repiton.dev.realityfamily.ru:9046/userservice/");
+        serverLabaK8s.setUrl("https://backend.repiton.dev.realityfamily.ru:9046/userservice/");
         return new OpenAPI().servers(List.of(serverThrowGateway, serverWithoutGateway, serverLabaK8s));
     }
 
