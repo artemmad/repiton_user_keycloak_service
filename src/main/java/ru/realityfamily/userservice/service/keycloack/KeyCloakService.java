@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.realityfamily.userservice.service.keycloack.entity.Credentials;
+import ru.realityfamily.userservice.web.dto.AuthResponse;
 import ru.realityfamily.userservice.web.dto.UserLoginRequest;
 import ru.realityfamily.userservice.web.dto.UserRequest;
 
@@ -81,9 +82,17 @@ public class KeyCloakService {
         return addRoleAndGroupToUserRepresentation(representation);
     }
 
+    public UserRepresentation getUserBuyEmail(String userEmail) {
+        UsersResource usersResource = getInstanceUsersResource();
+        UserRepresentation representation = usersResource.search("", "", "", userEmail, 0, 1).get(0);
+
+        //add not included fields like realmRoles and groups
+        return addRoleAndGroupToUserRepresentation(representation);
+    }
+
     public List<UserRepresentation> getUsersByGroupName(String groupName) {
         GroupsResource groupsResource = getInstanceGroupsResource();
-        List<GroupRepresentation> groupRepresentations = groupsResource.groups(groupName, 0,1);
+        List<GroupRepresentation> groupRepresentations = groupsResource.groups(groupName, 0, 1);
         GroupResource group = groupsResource.group(groupRepresentations.get(0).getId());
         return group.members();
     }
@@ -168,7 +177,7 @@ public class KeyCloakService {
     }
 
     @SneakyThrows
-    public AccessTokenResponse getAuthToken(UserLoginRequest userLoginRequest) {
+    public AuthResponse getAuthToken(UserLoginRequest userLoginRequest) {
         Map<String, Object> clientCredentials = new HashMap<>();
         clientCredentials.put("secret", clientSecret);
         clientCredentials.put("grant_type", "password");
@@ -177,16 +186,49 @@ public class KeyCloakService {
                 new Configuration(serverUrl, realm, clientId, clientCredentials, null);
         AuthzClient authzClient = AuthzClient.create(configuration);
 
-        if (userLoginRequest.getUsername()!= null && !userLoginRequest.getUsername().isEmpty()) {
-            return authzClient.obtainAccessToken(userLoginRequest.getUsername(), userLoginRequest.getPassword());
-        } else if (userLoginRequest.getEmail()!= null && !userLoginRequest.getEmail().isEmpty()) {
-            return authzClient.obtainAccessToken(userLoginRequest.getEmail(), userLoginRequest.getPassword());
+        if (userLoginRequest.getUsername() != null && !userLoginRequest.getUsername().isEmpty()) {
+            AccessTokenResponse accessTokenResponse = authzClient.obtainAccessToken(userLoginRequest.getUsername(), userLoginRequest.getPassword());
+
+            UserRepresentation user = getUserBuyName(userLoginRequest.getUsername());
+            return AuthResponse.builder()
+                    .access_token(accessTokenResponse.getToken())
+                    .expires_in(accessTokenResponse.getExpiresIn())
+                    .refresh_expires_in(accessTokenResponse.getRefreshExpiresIn())
+                    .refresh_token(accessTokenResponse.getRefreshToken())
+                    .token_type(accessTokenResponse.getTokenType())
+                    .session_state(accessTokenResponse.getSessionState())
+                    .error(accessTokenResponse.getError())
+                    .error_description(accessTokenResponse.getErrorDescription())
+                    .error_uri(accessTokenResponse.getErrorUri())
+
+                    .id(user.getId())
+                    .username(user.getUsername())
+                    .roles(user.getGroups())
+                    .build();
+        } else if (userLoginRequest.getEmail() != null && !userLoginRequest.getEmail().isEmpty()) {
+            AccessTokenResponse accessTokenResponse = authzClient.obtainAccessToken(userLoginRequest.getEmail(), userLoginRequest.getPassword());
+
+            UserRepresentation user = getUserBuyEmail(userLoginRequest.getEmail());
+            return AuthResponse.builder()
+                    .access_token(accessTokenResponse.getToken())
+                    .expires_in(accessTokenResponse.getExpiresIn())
+                    .refresh_expires_in(accessTokenResponse.getRefreshExpiresIn())
+                    .refresh_token(accessTokenResponse.getRefreshToken())
+                    .token_type(accessTokenResponse.getTokenType())
+                    .session_state(accessTokenResponse.getSessionState())
+                    .error(accessTokenResponse.getError())
+                    .error_description(accessTokenResponse.getErrorDescription())
+                    .error_uri(accessTokenResponse.getErrorUri())
+
+                    .id(user.getId())
+                    .username(user.getUsername())
+                    .roles(user.getGroups())
+                    .build();
         } else {
             throw new UnsupportedOperationException("There is no username or email in request. If email and username provided, username have priority");
         }
 
     }
-
 
 
     /// GROUPS
@@ -212,8 +254,6 @@ public class KeyCloakService {
     }
 
 
-
-
     public UsersResource getInstanceUsersResource() {
         return keycloak.realm(realm).users();
     }
@@ -225,7 +265,6 @@ public class KeyCloakService {
     public GroupsResource getInstanceGroupsResource() {
         return keycloak.realm(realm).groups();
     }
-
 
 
 }

@@ -17,6 +17,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
@@ -90,7 +93,24 @@ public class ApplicationConf {
         serverWithoutGateway.setUrl("http://localhost:9100/userservice");
         Server serverLabaK8s = new Server();
         serverWithoutGateway.setUrl("https://backend.repiton.dev.realityfamily.ru:9046/userservice/");
-        return new OpenAPI().servers(List.of(serverThrowGateway, serverWithoutGateway));
+        return new OpenAPI().servers(List.of(serverThrowGateway, serverWithoutGateway, serverLabaK8s));
     }
 
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+
+//        configuration.setAllowedOrigins(ImmutableList.of("https://www.yourdomain.com")); // www - obligatory
+        configuration.setAllowedOriginPatterns(List.of("*"));  //set access from all domains
+        configuration.setAllowedMethods(List.of("GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "TRACE"
+        ));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
 }
