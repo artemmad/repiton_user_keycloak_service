@@ -1,6 +1,5 @@
-package ru.realityfamily.userservice.web.controller;
+package ru.realityfamily.userkeycloakservice.web.controller;
 
-import org.apache.catalina.User;
 import org.keycloak.representations.idm.GroupRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -9,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.realityfamily.userservice.service.keycloack.KeyCloakService;
-import ru.realityfamily.userservice.web.dto.UserLoginRequest;
-import ru.realityfamily.userservice.web.dto.UserRequest;
-import ru.realityfamily.userservice.web.dto.UserResponse;
+import ru.realityfamily.userkeycloakservice.service.keycloack.KeyCloakService;
+import ru.realityfamily.userkeycloakservice.web.dto.UserLoginRequest;
+import ru.realityfamily.userkeycloakservice.web.dto.UserRequest;
+import ru.realityfamily.userkeycloakservice.web.dto.UserResponse;
 
 import java.util.List;
 

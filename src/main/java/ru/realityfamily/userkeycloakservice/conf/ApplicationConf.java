@@ -1,4 +1,4 @@
-package ru.realityfamily.userservice.conf;
+package ru.realityfamily.userkeycloakservice.conf;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -88,11 +87,11 @@ public class ApplicationConf {
     @Bean
     public OpenAPI customOpenAPI() {
         Server serverThrowGateway = new Server();
-        serverThrowGateway.setUrl("http://localhost:9101/userservice");
+        serverThrowGateway.setUrl("http://localhost:9101/");
         Server serverWithoutGateway = new Server();
-        serverWithoutGateway.setUrl("http://localhost:9100/userservice");
+        serverWithoutGateway.setUrl("http://localhost:9100/");
         Server serverLabaK8s = new Server();
-        serverLabaK8s.setUrl("https://backend.repiton.dev.realityfamily.ru:9046/userservice/");
+        serverLabaK8s.setUrl("https://backend.repiton.dev.realityfamily.ru:9046/user-keycloak-service/");
         return new OpenAPI().servers(List.of(serverThrowGateway, serverWithoutGateway, serverLabaK8s));
     }
 

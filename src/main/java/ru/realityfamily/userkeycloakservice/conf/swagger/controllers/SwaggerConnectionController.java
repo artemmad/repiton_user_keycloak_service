@@ -1,4 +1,4 @@
-package ru.realityfamily.userservice.conf.swagger.controllers;
+package ru.realityfamily.userkeycloakservice.conf.swagger.controllers;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +15,6 @@ import java.io.IOException;
 public class SwaggerConnectionController {
     @GetMapping(value = "/")
     public void root(HttpServletResponse rsp) throws IOException {
-        rsp.sendRedirect("/userservice/swagger-ui/index.html");
+        rsp.sendRedirect("/swagger-ui/index.html");
     }
 }

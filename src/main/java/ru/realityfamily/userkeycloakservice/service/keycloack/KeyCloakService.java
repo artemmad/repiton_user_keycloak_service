@@ -1,4 +1,4 @@
-package ru.realityfamily.userservice.service.keycloack;
+package ru.realityfamily.userkeycloakservice.service.keycloack;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -15,10 +15,10 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.realityfamily.userservice.service.keycloack.entity.Credentials;
-import ru.realityfamily.userservice.web.dto.AuthResponse;
-import ru.realityfamily.userservice.web.dto.UserLoginRequest;
-import ru.realityfamily.userservice.web.dto.UserRequest;
+import ru.realityfamily.userkeycloakservice.service.keycloack.entity.Credentials;
+import ru.realityfamily.userkeycloakservice.web.dto.AuthResponse;
+import ru.realityfamily.userkeycloakservice.web.dto.UserLoginRequest;
+import ru.realityfamily.userkeycloakservice.web.dto.UserRequest;
 
 import javax.ws.rs.core.Response;
 import java.util.*;

@@ -1,4 +1,4 @@
-package ru.realityfamily.userservice.web.dto;
+package ru.realityfamily.userkeycloakservice.web.dto;
 
 import lombok.Builder;
 import lombok.Data;

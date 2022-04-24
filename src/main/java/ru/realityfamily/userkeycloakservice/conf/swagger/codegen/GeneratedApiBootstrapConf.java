@@ -1,4 +1,4 @@
-package ru.realityfamily.userservice.conf.swagger.codegen;
+package ru.realityfamily.userkeycloakservice.conf.swagger.codegen;
 
 import lombok.Setter;
 import org.springframework.context.annotation.Configuration;

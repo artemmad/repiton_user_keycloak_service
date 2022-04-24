@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.realityfamily</groupId>
-    <artifactId>userservice</artifactId>
+    <artifactId>userkeycloakservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>userservice</name>
-    <description>userservice</description>
+    <name>userkeycloakservice</name>
+    <description>userkeycloakservice</description>
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2021.0.1</spring-cloud.version>

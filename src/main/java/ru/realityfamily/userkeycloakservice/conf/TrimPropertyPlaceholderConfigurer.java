@@ -1,4 +1,4 @@
-package ru.realityfamily.userservice.conf;
+package ru.realityfamily.userkeycloakservice.conf;
 
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 

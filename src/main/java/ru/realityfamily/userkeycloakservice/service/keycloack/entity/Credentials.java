@@ -1,4 +1,4 @@
-package ru.realityfamily.userservice.service.keycloack.entity;
+package ru.realityfamily.userkeycloakservice.service.keycloack.entity;
 
 import org.keycloak.representations.idm.CredentialRepresentation;
 
