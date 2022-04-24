@@ -84,16 +84,16 @@ public class ApplicationConf {
         return new KeycloakSpringBootConfigResolver();
     }
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        Server serverThrowGateway = new Server();
-        serverThrowGateway.setUrl("http://localhost:9101/");
-        Server serverWithoutGateway = new Server();
-        serverWithoutGateway.setUrl("http://localhost:9100/");
-        Server serverLabaK8s = new Server();
-        serverLabaK8s.setUrl("https://backend.repiton.dev.realityfamily.ru:9046/user-keycloak-service/");
-        return new OpenAPI().servers(List.of(serverThrowGateway, serverWithoutGateway, serverLabaK8s));
-    }
+//    @Bean
+//    public OpenAPI customOpenAPI() {
+//        Server serverThrowGateway = new Server();
+//        serverThrowGateway.setUrl("http://localhost:9101/");
+//        Server serverWithoutGateway = new Server();
+//        serverWithoutGateway.setUrl("http://localhost:9100/");
+//        Server serverLabaK8s = new Server();
+//        serverLabaK8s.setUrl("https://backend.repiton.dev.realityfamily.ru:9046/user-keycloak-service/");
+//        return new OpenAPI().servers(List.of(serverThrowGateway, serverWithoutGateway, serverLabaK8s));
+//    }
 
 
     @Bean
