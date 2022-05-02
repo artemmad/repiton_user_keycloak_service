@@ -42,7 +42,7 @@ spring:
 
 keycloak:
   realm: repiton
-  auth-server-url: http://keycloak-svc.keycloak.svc.cluster.local/auth
+  auth-server-url: https://keycloak.repiton.dev.realityfamily.ru:9043/auth
   ssl-required: external
   public-client: true
   #keycloak resource is the client ID
