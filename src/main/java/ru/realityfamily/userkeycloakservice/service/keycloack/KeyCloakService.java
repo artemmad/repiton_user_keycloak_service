@@ -14,8 +14,14 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import ru.realityfamily.userkeycloakservice.service.keycloack.entity.Credentials;
+import ru.realityfamily.userkeycloakservice.service.keycloack.entity.TokenValidateResponse;
 import ru.realityfamily.userkeycloakservice.web.dto.AuthResponse;
 import ru.realityfamily.userkeycloakservice.web.dto.UserLoginRequest;
 import ru.realityfamily.userkeycloakservice.web.dto.UserRequest;
@@ -272,4 +278,14 @@ public class KeyCloakService {
     }
 
 
+    public UserRepresentation validateToken(String authorization) {
+        String url = serverUrl + "/realms/" + realm +  "/protocol/openid-connect/userinfo";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", authorization);
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+        ResponseEntity<TokenValidateResponse> response= restTemplate.exchange(url, HttpMethod.GET,entity, TokenValidateResponse.class);
+        TokenValidateResponse tvr = response.getBody();
+        return getUserById(tvr.sub);
+    }
 }

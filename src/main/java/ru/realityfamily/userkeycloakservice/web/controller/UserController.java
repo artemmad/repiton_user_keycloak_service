@@ -1,5 +1,6 @@
 package ru.realityfamily.userkeycloakservice.web.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.GroupRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -13,9 +14,11 @@ import ru.realityfamily.userkeycloakservice.web.dto.UserLoginRequest;
 import ru.realityfamily.userkeycloakservice.web.dto.UserRequest;
 import ru.realityfamily.userkeycloakservice.web.dto.UserResponse;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
+@Slf4j
 //@RequestMapping("/user")
 public class UserController {
 
@@ -37,6 +40,16 @@ public class UserController {
             return ResponseEntity.status(401).body(e.getMessage());
         }
         catch(Exception e){
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "/user/validateToken")
+    public ResponseEntity<?> validateToken(HttpServletRequest request){
+        try{
+        return ResponseEntity.ok(keycloakService.validateToken(request.getHeader("Authorization")));}
+        catch (Exception e){
+            log.error("Got error on validate token: ", e);
             return ResponseEntity.status(401).body(e.getMessage());
         }
     }
