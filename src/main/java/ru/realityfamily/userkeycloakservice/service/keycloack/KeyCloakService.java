@@ -278,7 +278,7 @@ public class KeyCloakService {
     }
 
 
-    public UserRepresentation validateToken(String authorization) {
+    public AuthResponse validateToken(String authorization) {
         String url = serverUrl + "/realms/" + realm +  "/protocol/openid-connect/userinfo";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -286,6 +286,11 @@ public class KeyCloakService {
         HttpEntity<String> entity = new HttpEntity<String>(headers);
         ResponseEntity<TokenValidateResponse> response= restTemplate.exchange(url, HttpMethod.GET,entity, TokenValidateResponse.class);
         TokenValidateResponse tvr = response.getBody();
-        return getUserById(tvr.sub);
+        UserRepresentation user = getUserById(tvr.sub);
+        return AuthResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .roles(user.getGroups())
+                .build();
     }
 }
