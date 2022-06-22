@@ -52,7 +52,12 @@ public class KeyCloakService {
     public UserRepresentation addUser(UserRequest userDTO) {
 
         UserRepresentation user = new UserRepresentation();
-        user.setUsername(userDTO.getUserName());
+        if (userDTO.getUserName() != null && !userDTO.getUserName().isBlank()) {
+            user.setUsername(userDTO.getUserName());
+        } else {
+            user.setUsername(userDTO.getEmail());
+        }
+
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
@@ -279,12 +284,12 @@ public class KeyCloakService {
 
 
     public AuthResponse validateToken(String authorization) {
-        String url = serverUrl + "/realms/" + realm +  "/protocol/openid-connect/userinfo";
+        String url = serverUrl + "/realms/" + realm + "/protocol/openid-connect/userinfo";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authorization);
         HttpEntity<String> entity = new HttpEntity<String>(headers);
-        ResponseEntity<TokenValidateResponse> response= restTemplate.exchange(url, HttpMethod.GET,entity, TokenValidateResponse.class);
+        ResponseEntity<TokenValidateResponse> response = restTemplate.exchange(url, HttpMethod.GET, entity, TokenValidateResponse.class);
         TokenValidateResponse tvr = response.getBody();
         UserRepresentation user = getUserById(tvr.sub);
         return AuthResponse.builder()

@@ -25,7 +25,8 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
-
+  application:
+    name: user-keycloak-service
 ---
 
 spring:
@@ -171,7 +172,7 @@ keycloak:
 logging:
   level:
     ru:
-      udp: DEBUG
+      realityfamily: DEBUG
     org:
       apache:
         http: DEBUG
