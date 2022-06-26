@@ -25,6 +25,7 @@ import ru.realityfamily.userkeycloakservice.service.keycloack.entity.TokenValida
 import ru.realityfamily.userkeycloakservice.web.dto.AuthResponse;
 import ru.realityfamily.userkeycloakservice.web.dto.UserLoginRequest;
 import ru.realityfamily.userkeycloakservice.web.dto.UserRequest;
+import ru.realityfamily.userkeycloakservice.web.dto.UserRequestWithoutPassword;
 
 import javax.ws.rs.core.Response;
 import java.util.*;
@@ -165,6 +166,20 @@ public class KeyCloakService {
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         user.setCredentials(Collections.singletonList(credential));
+        user.setGroups(userDTO.getGroupsNames());
+
+        UsersResource usersResource = getInstanceUsersResource();
+        usersResource.get(userId).update(user);
+
+        return getUserById(userId);
+    }
+
+    public UserRepresentation updateUserWithoutPassword(String userId, UserRequestWithoutPassword userDTO) {
+        UserRepresentation user = new UserRepresentation();
+        user.setUsername(userDTO.getUserName());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
         user.setGroups(userDTO.getGroupsNames());
 
         UsersResource usersResource = getInstanceUsersResource();

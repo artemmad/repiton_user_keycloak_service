@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.realityfamily.userkeycloakservice.service.keycloack.KeyCloakService;
 import ru.realityfamily.userkeycloakservice.web.dto.UserLoginRequest;
 import ru.realityfamily.userkeycloakservice.web.dto.UserRequest;
+import ru.realityfamily.userkeycloakservice.web.dto.UserRequestWithoutPassword;
 import ru.realityfamily.userkeycloakservice.web.dto.UserResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -76,6 +77,11 @@ public class UserController {
     @PutMapping(path = "/user/update/{userId}")
     public UserResponse updateUser(@PathVariable("userId") String userId, @RequestBody UserRequest userDTO) {
         return mapper.map(keycloakService.updateUser(userId, userDTO), UserResponse.class);
+    }
+
+    @PutMapping(path = "/user/update-without-password/{userId}")
+    public UserResponse updateUserWithoutPassword(@PathVariable("userId") String userId, @RequestBody UserRequestWithoutPassword userDTO) {
+        return mapper.map(keycloakService.updateUserWithoutPassword(userId, userDTO), UserResponse.class);
     }
 
     @DeleteMapping(path = "/user/delete/{userId}")
