@@ -1,21 +1,21 @@
-#Local development
+# Local development
 
-Зависимости:
-- KeyCloak 16.1.1 (версия в большнистве Helm пакетах)
+Dependencies:
+- KeyCloak 16.1.1 (version in most Helm packages)
 
-Для локальной разработки достаточно поднять себе локальный инстанс keycloak. Сделать это можно так:
+For local development, it is enough to raise a local keycloak instance for yourself. You can do it like this:
 
 ``
 docker run -p 8085:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:16.1.1
 ``
 
-Так порту 8085 поднимется минимальная версия для работы.
-Далее необходимо создать новый Realm с именем **"repiton"**, зайти в него, найти Client c именем **"admin_cli"** и выдать ему в Service Account панели разрешения на манипулирования с учетками юзеров.
-Минимально необходимы разрешения на:
-- выборку пользователей
-- создание пользователей
+So the minimum version for work will rise to port 8085.
+Next, you need to create a new Realm named **"repiton"**, go into it, find a Client named **"admin_cli"** and give him permissions to manipulate user accounts in the Service Account panel.
+Minimal permissions are required for:
+- selection of users
+- creating users
 
-Все остальное не обязательно, но желательно.
-После этого во вкладке Credentials необходимо скопировать секрет этого пользователя и вставить его вместе с его client_id
-в KeycloakConfig.java.
-После всех манипуляций с кредами, не забыть поменять или уточнить адрес севера, если вы меняли порты в команде выше с докером. Если ничего не менялось, запустится ровно с тем что уже есть в конфиге за исключением секрета пользователя, который поменять обязательно придется так как он пересоздался при старте контейнера на вашей машине.
+Everything else is optional, but desirable.
+After that, in the Credentials tab, you need to copy the secret of this user and paste it along with his client_id
+into KeycloakConfig.java .
+After all the manipulations with the credits, do not forget to change or clarify the address of the north if you changed the ports in the command above with the docker. If nothing has changed, it will start exactly with what is already in the config, with the exception of the user's secret, which will definitely have to be changed since it was recreated when the container started on your machine.
